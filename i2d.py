@@ -10,15 +10,28 @@ def trimming(img, mag):
 
 def mosaic(img, mag):
     h, w = img.shape[:2]
-    for i in range(0, h, mag):
-        for j in range(0, w, mag):
-            print(img[i, j])
+    ww = int(w / mag)
+    hh = int(h / mag)
+    tmp = np.zeros((h, ww))
+    res = np.zeros((hh, ww))
+
+    for i in range(h):
+        for j in range(ww):
+            for k in range(mag):
+                tmp[i, j] += img[i, j * mag + k]
+
+    for i in range(hh):
+        for j in range(ww):
+            for k in range(mag):
+                res[i, j] += tmp[i * mag + k, j]
+            res[i, j] /= mag * mag
+
+    return res
 
 
 img = cv2.imread('lenna.jpg', 0)
 mag = 12
-trim_img = trimming(img, mag)
-mosaic(trim_img, mag)
+dst = mosaic(trimming(img, mag), mag)
 
-plt.imshow(trim_img, cmap='gray', interpolation='bicubic')
+plt.imshow(dst, cmap='gray')
 plt.show()
