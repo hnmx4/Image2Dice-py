@@ -41,7 +41,9 @@ class I2D:
         return np.vstack((np.array([np.hstack((np.array([cv2.imread("%d.png" % src[i, j]) for j in range(w)]))) for i in range(h)])))
 
 
-i2d = I2D('lenna.jpg')
+print('please type filename...')
+filename = input()
+i2d = I2D(filename)
 dst = i2d.dice()
 
 cv2.imwrite('dst.jpg', dst)
