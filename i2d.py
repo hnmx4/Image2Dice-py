@@ -24,7 +24,7 @@ def mosaic(img, mag):
         for j in range(ww):
             for k in range(mag):
                 res[i, j] += tmp[i * mag + k, j]
-            res[i, j] /= mag * mag
+            res[i, j] = int(res[i, j] / (mag * mag * int(255 / 7)))  # quantize
 
     return res
 
