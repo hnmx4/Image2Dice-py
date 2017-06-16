@@ -1,3 +1,4 @@
+import math
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
@@ -25,7 +26,7 @@ def mosaic(img, mag):
         for j in range(ww):
             for k in range(mag):
                 res[i, j] += tmp[i * mag + k, j]
-            res[i, j] = int(res[i, j] / (mag * mag * int(255 / lv)))  # quantize
+            res[i, j] = int(res[i, j] / (mag * mag * math.ceil(255 / lv)))  # quantize
 
     return res
 
@@ -38,6 +39,6 @@ def diceize(img):
 img = cv2.imread('lenna.jpg', 0)
 mag = 12
 dst = diceize(mosaic(trimming(img, mag), mag))
-
+cv2.imwrite('dst.jpg', dst)
 plt.imshow(dst, cmap='gray')
 plt.show()
