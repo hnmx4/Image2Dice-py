@@ -10,6 +10,7 @@ def trimming(img, mag):
 
 def mosaic(img, mag):
     h, w = img.shape[:2]
+    lv = 7
     ww = int(w / mag)
     hh = int(h / mag)
     tmp = np.zeros((h, ww))
@@ -24,14 +25,19 @@ def mosaic(img, mag):
         for j in range(ww):
             for k in range(mag):
                 res[i, j] += tmp[i * mag + k, j]
-            res[i, j] = int(res[i, j] / (mag * mag * int(255 / 7)))  # quantize
+            res[i, j] = int(res[i, j] / (mag * mag * int(255 / lv)))  # quantize
 
     return res
 
 
+def diceize(img):
+    h, w = img.shape[:2]
+    return np.vstack((np.array([np.hstack((np.array([cv2.imread("%d.png" % img[i, j]) for j in range(w)]))) for i in range(h)])))
+
+
 img = cv2.imread('lenna.jpg', 0)
 mag = 12
-dst = mosaic(trimming(img, mag), mag)
+dst = diceize(mosaic(trimming(img, mag), mag))
 
 plt.imshow(dst, cmap='gray')
 plt.show()
